@@ -1,0 +1,284 @@
+*yaml-breadcrumb.txt*    YAML breadcrumb navigation for Neovim
+
+Author: Your Name <your-email@example.com>
+License: MIT
+Version: 1.0.0
+
+==============================================================================
+CONTENTS                                              *yaml-breadcrumb-contents*
+
+    1. Introduction ........................ |yaml-breadcrumb-introduction|
+    2. Requirements ........................ |yaml-breadcrumb-requirements|
+    3. Installation ........................ |yaml-breadcrumb-installation|
+    4. Configuration ....................... |yaml-breadcrumb-configuration|
+    5. Usage ............................... |yaml-breadcrumb-usage|
+    6. Commands ............................ |yaml-breadcrumb-commands|
+    7. Functions ........................... |yaml-breadcrumb-functions|
+    8. Examples ............................ |yaml-breadcrumb-examples|
+    9. Statusline Integration .............. |yaml-breadcrumb-statusline|
+   10. Troubleshooting ..................... |yaml-breadcrumb-troubleshooting|
+   11. Changelog ........................... |yaml-breadcrumb-changelog|
+
+==============================================================================
+1. INTRODUCTION                                   *yaml-breadcrumb-introduction*
+
+yaml-breadcrumb.nvim is a Neovim plugin that provides breadcrumb navigation
+for YAML files. It shows the hierarchical path to your current cursor position,
+making it easier to navigate complex YAML structures.
+
+Features:
+- Visual breadcrumb display as virtual text
+- Auto-update on cursor movement
+- Array index tracking with proper indexing
+- Line number integration (optional)
+- Customizable appearance and behavior
+- Statusline integration support
+- Health check diagnostics
+
+==============================================================================
+2. REQUIREMENTS                                   *yaml-breadcrumb-requirements*
+
+- Neovim >= 0.7.0 (for virtual text support)
+- YAML files with .yaml or .yml extension
+
+==============================================================================
+3. INSTALLATION                                   *yaml-breadcrumb-installation*
+
+Using lazy.nvim: >
+    {
+      "your-username/yaml-breadcrumb.nvim",
+      ft = { "yaml", "yml" },
+      config = function()
+        require("yaml-breadcrumb").setup()
+      end,
+    }
+<
+
+Using packer.nvim: >
+    use {
+      "your-username/yaml-breadcrumb.nvim",
+      ft = { "yaml", "yml" },
+      config = function()
+        require("yaml-breadcrumb").setup()
+      end
+    }
+<
+
+==============================================================================
+4. CONFIGURATION                                 *yaml-breadcrumb-configuration*
+
+Setup function: >
+    require("yaml-breadcrumb").setup({
+      enabled = true,
+      show_on_cursor_move = true,
+      virtual_text = true,
+      separator = " > ",
+      show_line_numbers = false,
+      highlight_group = "Comment",
+    })
+<
+
+Configuration options:
+
+enabled                                    *yaml-breadcrumb-config-enabled*
+    Type: boolean
+    Default: true
+    Description: Enable or disable the plugin globally.
+
+show_on_cursor_move                  *yaml-breadcrumb-config-show-on-cursor-move*
+    Type: boolean
+    Default: true
+    Description: Automatically update breadcrumb when cursor moves in YAML files.
+
+virtual_text                              *yaml-breadcrumb-config-virtual-text*
+    Type: boolean
+    Default: true
+    Description: Display breadcrumb as virtual text at the end of the current line.
+
+separator                                  *yaml-breadcrumb-config-separator*
+    Type: string
+    Default: " > "
+    Description: String used to separate breadcrumb components.
+
+show_line_numbers                    *yaml-breadcrumb-config-show-line-numbers*
+    Type: boolean
+    Default: false
+    Description: Include line numbers in breadcrumb display (e.g., "key (L10)").
+
+highlight_group                          *yaml-breadcrumb-config-highlight-group*
+    Type: string
+    Default: "Comment"
+    Description: Neovim highlight group used for virtual text styling.
+
+==============================================================================
+5. USAGE                                                 *yaml-breadcrumb-usage*
+
+The plugin automatically activates when you open YAML files (.yaml, .yml).
+By default, it shows breadcrumbs as virtual text that updates as you move
+your cursor.
+
+Default keymaps:
+- `<leader>yb` - Show breadcrumb notification
+- `<leader>yt` - Toggle plugin on/off
+
+The breadcrumb shows the hierarchical path from the root to your current
+position, including:
+- YAML keys
+- Array indices (e.g., [0], [1])
+- Nested structures
+
+==============================================================================
+6. COMMANDS                                           *yaml-breadcrumb-commands*
+
+:YamlBreadcrumb                                            *:YamlBreadcrumb*
+    Show the YAML breadcrumb for the current cursor position as a notification.
+    Also displays debug information about the current line.
+
+:YamlBreadcrumbToggle                                *:YamlBreadcrumbToggle*
+    Toggle the plugin on or off. When disabled, virtual text is cleared and
+    auto-updates are stopped.
+
+:YamlBreadcrumbHealth                                *:YamlBreadcrumbHealth*
+    Run health check to verify plugin status and configuration.
+    Equivalent to `:checkhealth yaml-breadcrumb`.
+
+==============================================================================
+7. FUNCTIONS                                         *yaml-breadcrumb-functions*
+
+The following functions are available for advanced usage:
+
+yaml-breadcrumb.setup({opts})                    *yaml-breadcrumb.setup()*
+    Initialize the plugin with the given configuration.
+    
+    Parameters:
+        {opts} (table, optional): Configuration options table
+
+yaml-breadcrumb.show_breadcrumb()          *yaml-breadcrumb.show_breadcrumb()*
+    Manually show the breadcrumb for the current cursor position.
+    Displays both notification and virtual text (if enabled).
+
+yaml-breadcrumb.toggle()                          *yaml-breadcrumb.toggle()*
+    Toggle the plugin enabled state.
+
+yaml-breadcrumb.get_current_breadcrumb()  *yaml-breadcrumb.get_current_breadcrumb()*
+    Get the current breadcrumb as a formatted string.
+    Returns empty string if not in a YAML file or no breadcrumb available.
+    Useful for statusline integration.
+
+yaml-breadcrumb.is_yaml_file()                *yaml-breadcrumb.is_yaml_file()*
+    Check if the current buffer is a YAML file.
+    Returns true for files with yaml filetype or .yaml/.yml extension.
+
+==============================================================================
+8. EXAMPLES                                           *yaml-breadcrumb-examples*
+
+Basic YAML structure: >
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: my-config
+      namespace: default
+    data:
+      config.yaml: |
+        database:
+          host: localhost
+          port: 5432  # <- cursor here
+<
+
+Breadcrumb output: >
+    🍞 apiVersion > kind > metadata > data > config.yaml > database > port
+<
+
+YAML with arrays: >
+    users:
+      - name: john
+        email: john@example.com
+        roles:
+          - admin
+          - user
+      - name: jane
+        email: jane@example.com  # <- cursor here
+<
+
+Breadcrumb output: >
+    🍞 users > [1] > email
+<
+
+With line numbers enabled: >
+    🍞 users (L1) > [1] (L8) > email (L9)
+<
+
+==============================================================================
+9. STATUSLINE INTEGRATION                          *yaml-breadcrumb-statusline*
+
+You can integrate the breadcrumb into your statusline using the
+|yaml-breadcrumb.get_current_breadcrumb()| function.
+
+With lualine.nvim: >
+    require('lualine').setup {
+      sections = {
+        lualine_c = {
+          'filename',
+          function()
+            return require('yaml-breadcrumb').get_current_breadcrumb()
+          end
+        }
+      }
+    }
+<
+
+With custom statusline: >
+    vim.o.statusline = vim.o.statusline .. 
+      '%{luaeval("require(\'yaml-breadcrumb\').get_current_breadcrumb()")}'
+<
+
+==============================================================================
+10. TROUBLESHOOTING                              *yaml-breadcrumb-troubleshooting*
+
+Common issues and solutions:
+
+Problem: Breadcrumb not showing
+Solution: 
+- Ensure you're in a YAML file (.yaml or .yml extension)
+- Check that the plugin is enabled: `:YamlBreadcrumbHealth`
+- Verify filetype is set: `:set filetype?`
+
+Problem: Virtual text not appearing
+Solution:
+- Check that `virtual_text = true` in your configuration
+- Ensure Neovim version >= 0.7.0
+- Try `:YamlBreadcrumb` to see if breadcrumb detection works
+
+Problem: Incorrect indentation detection
+Solution:
+- The plugin uses space-based indentation detection
+- Ensure consistent indentation in your YAML file
+- Mixed tabs and spaces may cause issues
+
+Problem: Array indices incorrect
+Solution:
+- Check that array items start with `- ` (dash followed by space)
+- Ensure proper YAML array syntax
+
+Health check:
+Run `:YamlBreadcrumbHealth` or `:checkhealth yaml-breadcrumb` to diagnose
+configuration and functionality issues.
+
+Debug mode:
+Use `:YamlBreadcrumb` to see debug information about line detection,
+including the raw line content and extracted key information.
+
+==============================================================================
+11. CHANGELOG                                          *yaml-breadcrumb-changelog*
+
+Version 1.0.0
+- Initial release
+- Basic breadcrumb functionality
+- Virtual text support
+- Array index tracking
+- Configurable appearance
+- Statusline integration
+- Health check support
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:
