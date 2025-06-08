@@ -93,11 +93,9 @@ function M.show_breadcrumb()
     local message = M.format_breadcrumb(breadcrumb)
     vim.notify(message, vim.log.levels.INFO)
     
-    -- Debug: show what we detected
     local current_line = vim.api.nvim_win_get_cursor(0)[1]
     local line_content = vim.api.nvim_buf_get_lines(0, current_line - 1, current_line, false)[1]
     local key, is_array = M.extract_key(line_content)
-    vim.notify("Debug - Line: '" .. line_content .. "', Key: " .. (key or "nil") .. ", IsArray: " .. tostring(is_array), vim.log.levels.INFO)
     
     if M.config.virtual_text then
       M.show_virtual_text(message)
