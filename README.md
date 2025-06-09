@@ -69,7 +69,7 @@ require("yaml-breadcrumb").setup({
 | `enabled` | boolean | `true` | Enable or disable the plugin |
 | `show_on_cursor_move` | boolean | `true` | Automatically update breadcrumb when cursor moves |
 | `virtual_text` | boolean | `true` | Display breadcrumb as virtual text at end of line |
-| `separator` | string | `" > "` | String used to separate breadcrumb components |
+| `separator` | string | `" -> "` | String used to separate breadcrumb components |
 | `show_line_numbers` | boolean | `false` | Include line numbers in breadcrumb display |
 | `highlight_group` | string | `"Comment"` | Neovim highlight group for virtual text styling |
 
