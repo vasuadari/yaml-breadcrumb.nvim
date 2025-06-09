@@ -19,7 +19,7 @@ A Neovim plugin that provides YAML breadcrumb navigation, showing the hierarchic
 
 ```lua
 {
-  "your-username/yaml-breadcrumb.nvim",
+  "vasuadari/yaml-breadcrumb.nvim",
   ft = { "yaml", "yml" },
   config = function()
     require("yaml-breadcrumb").setup({
@@ -33,7 +33,7 @@ A Neovim plugin that provides YAML breadcrumb navigation, showing the hierarchic
 
 ```lua
 use {
-  "your-username/yaml-breadcrumb.nvim",
+  "vasuadari/yaml-breadcrumb.nvim",
   ft = { "yaml", "yml" },
   config = function()
     require("yaml-breadcrumb").setup()
@@ -44,7 +44,7 @@ use {
 ### Using [vim-plug](https://github.com/junegunn/vim-plug)
 
 ```vim
-Plug 'your-username/yaml-breadcrumb.nvim'
+Plug 'vasuadari/yaml-breadcrumb.nvim'
 ```
 
 ## Configuration
